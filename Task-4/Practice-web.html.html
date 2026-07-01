@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новогодний калькулятор</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .result-div {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e2e8f0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <input type="text" id="dateInput" placeholder="дд.мм.гггг">
+    <br>
+    <button onclick="processData()">Рассчитать</button>
+    <div id="daysDiv" class="result-div">Количество дней до Нового года появится здесь</div>
+    <div id="leapDiv" class="result-div">Информация о високосном годе появится здесь</div>
+</div>
+
+<script>
+    // Подсчет дней до Нового года
+    function calculateDaysToNewYear(day, month, year) {
+        const inputDate = new Date(year, month - 1, day);
+        const newYearDate = new Date(year, 11, 31); // 31 декабря введенного года
+        
+        const diffTime = newYearDate - inputDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
+    // Проверка високосного года
+    function isLeapYear(year) {
+        if (year % 400 === 0) return true;
+        if (year % 100 === 0) return false;
+        return year % 4 === 0;
+    }
+
+    // Основная функция обработки нажатия кнопки
+    function processData() {
+        const dateString = document.getElementById('dateInput').value;
+        const parts = dateString.split('.');
+        
+        if (parts.length !== 3) {
+            alert("Пожалуйста, введите дату строго в формате дд.мм.гггг");
+            return;
+        }
+
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+
+        const daysLeft = calculateDaysToNewYear(day, month, year);
+        const isLeap = isLeapYear(year);
+
+        document.getElementById('daysDiv').innerText = `Дней до Нового года: ${daysLeft}`;
+        document.getElementById('leapDiv').innerText = isLeap ? "Год: високосный" : "Год: не високосный";
+    }
+</script>
+
+</body>
+</html>
